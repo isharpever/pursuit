@@ -103,6 +103,8 @@ public abstract class AbstractLevel implements Level {
                 }
             }
         }
+        // 回溯处理前一棋子前,确保当前棋子离开棋盘
+        currentCp.takeAway();
         return false;
     }
 

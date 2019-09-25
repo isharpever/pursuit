@@ -115,6 +115,9 @@ public class ChessPiece implements Cloneable {
 
             // 释放占据的棋盘格
             for (int i = 0; i < this.cells.length; i++) {
+                if (this.cells[i] == null) {
+                    continue;
+                }
                 this.cells[i].release(this);
                 this.cells[i] = null;
             }
