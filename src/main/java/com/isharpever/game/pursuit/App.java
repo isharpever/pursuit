@@ -6,10 +6,10 @@ package com.isharpever.game.pursuit;
 public class App {
     public static void main(String[] args) {
         // 关卡
-        Level level = new Level02();
+        Level level = new Level40();
         level.init();
 
         // 求解
-        level.solve(true);
+        level.solve(false);
     }
 }
