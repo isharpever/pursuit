@@ -43,6 +43,14 @@ public class Cell implements Cloneable {
         return chessPiece == null;
     }
 
+    /**
+     * 返回棋盘格内是否是建筑
+     * @return
+     */
+    public boolean isBuilding() {
+        return chessPiece != null && chessPiece.getChessPieceType() == ChessPieceType.BUILDING;
+    }
+
     @Override
     protected Cell clone() throws CloneNotSupportedException {
         return (Cell)super.clone();

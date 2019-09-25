@@ -42,9 +42,7 @@ public class Board {
         int cellNum = ROW_NUM * COL_NUM;
         this.cells = new Cell[cellNum];
         for (int i = 0; i < cellNum; i++) {
-            int y = cellNum / this.colNum;
-            int x = cellNum - y * this.colNum;
-            this.cells[i] = new Cell(i, x, y);
+            this.cells[i] = new Cell(i, getX(i), getY(i));
         }
     }
 
@@ -101,8 +99,26 @@ public class Board {
      * @param cellOrder
      * @return
      */
-    public boolean occupied(int cellOrder) {
+    public boolean isNotEmpty(int cellOrder) {
         return !getCell(cellOrder).isEmpty();
+    }
+
+    /**
+     * 返回指定序号位置的棋盘格里是否有警车
+     * @param cellOrder
+     * @return
+     */
+    public boolean isPoliceCar(int cellOrder) {
+        return this.cells[cellOrder].isPoliceCar();
+    }
+
+    /**
+     * 返回指定序号位置的棋盘格里是否有警车
+     * @param cellOrder
+     * @return
+     */
+    public boolean isBuilding(int cellOrder) {
+        return this.cells[cellOrder].isBuilding();
     }
 
     /**
@@ -119,5 +135,37 @@ public class Board {
      */
     public void print() {
         System.out.println(JSON.toJSONString(this.cells));
+    }
+
+    /**
+     * 返回指定序号的棋盘格是否在棋盘边界以外(含边界)
+     * @param cellOrder
+     * @return
+     */
+    public static boolean isOnOrOutOfBorder(int cellOrder) {
+        if (cellOrder < 0 || cellOrder >= COL_NUM * ROW_NUM) {
+            return true;
+        }
+
+        int y = getY(cellOrder);
+        if (y == 0 || y == ROW_NUM - 1) {
+            return true;
+        }
+
+        int x = getX(cellOrder);
+        if (x == 0 || x == COL_NUM - 1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static int getX(int cellOrder) {
+        int y = getY(cellOrder);
+        return cellOrder - y * COL_NUM;
+    }
+
+    public static int getY(int cellOrder) {
+        return cellOrder / COL_NUM;
     }
 }

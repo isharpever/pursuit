@@ -73,11 +73,7 @@ public class ChessPiece implements Cloneable {
      * @return true:成功 false:失败
      */
     public void place(int position, Board board) {
-        if (position < 0 || position > getMaxPosition()) {
-            String message = String.format("不能放在这个位置(%s),允许的位置范围是0~%s",
-                    position, getMaxPosition());
-            throw new IllegalStateException(message);
-        }
+        checkPlacePosition(position);
 
         synchronized (this) {
             takeAway();
@@ -90,7 +86,7 @@ public class ChessPiece implements Cloneable {
                 int cellOrder = getCellOrders()[i] + position;
 
                 // 冲突检测
-                if (board.occupied(cellOrder)) {
+                if (board.isNotEmpty(cellOrder)) {
                     takeAway();
                     throw new IllegalStateException("棋盘格已有棋子 cellOrder=" + cellOrder);
                 }
@@ -125,6 +121,15 @@ public class ChessPiece implements Cloneable {
         }
     }
 
+    private void checkPlacePosition(int position) {
+        if (position < 0 || Board.getY(position) > getMaxRowNo()
+                || Board.getX(position) > getMaxColNo()) {
+            String message = String.format("不能放在这个位置(%s),允许的最大行=%s,最大列=%s",
+                    position, getMaxRowNo(), getMaxColNo());
+            throw new IllegalStateException(message);
+        }
+    }
+
     public boolean hasNextShape() {
         int length = this.possibleShapes.length;
         return this.currentShapeIndex < length - 1;
@@ -147,8 +152,12 @@ public class ChessPiece implements Cloneable {
         return this.possibleShapes[this.currentShapeIndex].getCellOrders();
     }
 
-    private int getMaxPosition() {
-        return this.possibleShapes[this.currentShapeIndex].getMaxPosition();
+    private int getMaxRowNo() {
+        return this.possibleShapes[this.currentShapeIndex].getMaxRowNo();
+    }
+
+    private int getMaxColNo() {
+        return this.possibleShapes[this.currentShapeIndex].getMaxColNo();
     }
 
     private int getPoliceOrder() {
