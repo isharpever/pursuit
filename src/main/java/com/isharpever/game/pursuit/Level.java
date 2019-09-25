@@ -12,14 +12,7 @@ public interface Level {
 
     /**
      * 破解
+     * @param includeNotSieged 是否包含不能围住小偷的答案
      */
-    void solve();
-
-    /**
-     * 是否检查答案
-     * @return
-     */
-    default boolean answerCheck() {
-        return true;
-    }
+    void solve(boolean includeNotSieged);
 }

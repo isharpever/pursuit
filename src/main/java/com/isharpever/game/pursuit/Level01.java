@@ -15,9 +15,4 @@ public class Level01 extends AbstractLevel {
     protected int getThiefPosition() {
         return 8;
     }
-
-    @Override
-    public boolean answerCheck() {
-        return true;
-    }
 }

@@ -15,9 +15,4 @@ public class Level64 extends AbstractLevel {
     protected int getThiefPosition() {
         return 14;
     }
-
-    @Override
-    public boolean answerCheck() {
-        return false;
-    }
 }

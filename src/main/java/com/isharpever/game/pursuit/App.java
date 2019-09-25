@@ -6,10 +6,10 @@ package com.isharpever.game.pursuit;
 public class App {
     public static void main(String[] args) {
         // 64关
-        Level level = new Level01();
+        Level level = new Level64();
         level.init();
 
         // 求解
-        level.solve();
+        level.solve(true);
     }
 }

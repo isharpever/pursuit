@@ -47,8 +47,8 @@ public abstract class AbstractLevel implements Level {
     protected abstract void doInit();
 
     @Override
-    public void solve() {
-        doSolve(0);
+    public void solve(boolean includeNotSieged) {
+        doSolve(0, includeNotSieged);
 
         // 打印答案
         printAnswers();
@@ -57,9 +57,10 @@ public abstract class AbstractLevel implements Level {
     /**
      * 破解
      * @param cpIndex
+     * @param includeNotSieged
      * @return
      */
-    protected boolean doSolve(int cpIndex) {
+    protected boolean doSolve(int cpIndex, boolean includeNotSieged) {
         // 所有棋子都放成功后,判断是否能围住小偷
         if (cpIndex > getPoliceChessPieces().size() - 1) {
             List<ChessPiece> answer = new ArrayList<>();
@@ -71,9 +72,9 @@ public abstract class AbstractLevel implements Level {
                 }
             }
 
-            if (answerCheck() && thiefBesieged()) {
+            if (!includeNotSieged && thiefBesieged()) {
                 getAnswers().add(answer);
-            } else if (!answerCheck()) {
+            } else if (includeNotSieged) {
                 getAnswers().add(answer);
             }
 
@@ -92,7 +93,7 @@ public abstract class AbstractLevel implements Level {
                     currentCp.place(cell, getBoard());
 
                     // 成功后,放下一棋子
-                    boolean nextResult = doSolve(cpIndex + 1);
+                    boolean nextResult = doSolve(cpIndex + 1, includeNotSieged);
                     if (nextResult) {
                         return true;
                     }
