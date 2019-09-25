@@ -9,7 +9,7 @@ public abstract class AbstractLevel implements Level {
 
     private Board board = Board.getInstance();
     private List<ChessPiece> policeChessPieces = new ArrayList<>();
-    private List<List<ChessPiece>> answers = new ArrayList<>();
+    private List<Answer> answers = new ArrayList<>();
 
     @Override
     public void init() {
@@ -63,19 +63,21 @@ public abstract class AbstractLevel implements Level {
     protected boolean doSolve(int cpIndex, boolean includeNotSieged) {
         // 所有棋子都放成功后,判断是否能围住小偷
         if (cpIndex > getPoliceChessPieces().size() - 1) {
-            List<ChessPiece> answer = new ArrayList<>();
+            List<ChessPiece> chessPieces = new ArrayList<>();
             for (int i = 0; i < getPoliceChessPieces().size(); i++) {
                 ChessPiece cp = getPoliceChessPieces().get(i);
                 try {
-                    answer.add(cp.clone());
+                    chessPieces.add(cp.clone());
                 } catch (CloneNotSupportedException e) {
                 }
             }
 
-            if (!includeNotSieged && thiefBesieged()) {
-                getAnswers().add(answer);
+            Answer thisAnswer = new Answer(chessPieces);
+            if (thiefBesieged()) {
+                thisAnswer.setTheifBeSieged(true);
+                getAnswers().add(thisAnswer);
             } else if (includeNotSieged) {
-                getAnswers().add(answer);
+                getAnswers().add(thisAnswer);
             }
 
             // 继续找其他解法
@@ -186,12 +188,13 @@ public abstract class AbstractLevel implements Level {
         }
 
         int asIndex = 0;
-        for (List<ChessPiece> answer : getAnswers()) {
+        for (Answer answer : getAnswers()) {
             asIndex++;
-            System.out.println(String.format("答案%s:", asIndex));
+            System.out.println(String.format("答案%s(%s):", asIndex,
+                    answer.isTheifBeSieged() ? "能围住小偷" : "不能围住小偷"));
 
             int index = 0;
-            for (ChessPiece cp : answer) {
+            for (ChessPiece cp : answer.getChessPieces()) {
                 index++;
                 StringBuilder sb = new StringBuilder("棋子").append(index).append("的位置===");
                 for (Cell cell : cp.getCells()) {
@@ -216,7 +219,7 @@ public abstract class AbstractLevel implements Level {
         return board;
     }
 
-    protected List<List<ChessPiece>> getAnswers() {
+    protected List<Answer> getAnswers() {
         return answers;
     }
 }
