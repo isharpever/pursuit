@@ -6,7 +6,7 @@ package com.isharpever.game.pursuit;
 public class App {
     public static void main(String[] args) {
         // 关卡
-        Level level = new Level71();
+        Level level = new Level72();
         level.init();
 
         // 求解
